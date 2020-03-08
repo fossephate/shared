@@ -159,7 +159,6 @@ class AccountModal extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		timePlayed: state.client.timePlayed,
-		// email: state.client.email,
 		emailVerified: state.client.emailVerified,
 		authToken: state.client.authToken,
 	};
