@@ -3,8 +3,8 @@ import React, { PureComponent } from "react";
 import { Field, reduxForm } from "redux-form";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 import {
-	withStyles,
 	TextField,
 	Checkbox,
 	InputLabel,

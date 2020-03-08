@@ -24,17 +24,11 @@ const SPECIAL_KEYS = {
 
 export class VirtualKeyboard {
 	constructor(keyboardWrapper) {
-		// this.keyboardWrapper = keyboardWrapper;
-		// this.kW = this.keyboardWrapper;
-
 		this.kW = keyboardWrapper;
 
 		this.changed = false;
 		this.cstate = new ControllerState();
 		this.kstate = new KeyboardState();
-
-		this.getControllerState = this.getControllerState.bind(this);
-		this.getState = this.getState.bind(this);
 
 		// a list of keys to keep track of:
 		this.keysToTrack = [];
@@ -95,7 +89,7 @@ export class VirtualKeyboard {
 
 	// get controller state:
 
-	poll() {
+	poll = () => {
 		let oldControllerState = this.cstate.getState();
 
 		this.cstate.axes[0] = 0;
@@ -270,13 +264,13 @@ export class VirtualKeyboard {
 		} else {
 			this.changed = true;
 		}
-	}
+	};
 
-	getControllerState() {
+	getControllerState = () => {
 		return this.cstate.getState();
-	}
+	};
 
-	getState() {
+	getState = () => {
 		return this.kstate;
-	}
+	};
 }

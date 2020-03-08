@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Fab, TextField, Paper, ListItem, ListItemText } from "@material-ui/core";
 
 // icons:
-import SendIcon from "@material-ui/icons/Send";
+import { Send as SendIcon } from "@material-ui/icons";
 
 // mentions / autocomplete:
 import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
