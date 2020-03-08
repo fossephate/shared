@@ -11,7 +11,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 // redux:
 import { connect } from "react-redux";
-import { sendMessage } from "src/actions/chat.js";
+import { sendMessage } from "shared/features/chat.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -58,15 +58,13 @@ class MessageList extends Component {
 		this.messagesEnd = null;
 		this.rootRef = React.createRef();
 		this.shouldScroll = false;
-		// this.scrollToBottom = this.scrollToBottom.bind(this);
-		this.handleClick = this.handleClick.bind(this);
 
 		this.state = {
 			voting: false,
 		};
 	}
 
-	handleClick(event) {}
+	handleClick = (event) => {};
 
 	getSnapshotBeforeUpdate(prevProps, prevState) {
 		if (prevProps.messages.length < this.props.messages.length) {

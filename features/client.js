@@ -1,18 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const clientSlice = createSlice({
 	name: "client",
-	initialState: {},
+	initialState: {
+		authToken: null,
+		loggedIn: false,
+		hostAuthed: false,
+		userid: null,
+		username: "???",
+		connectedAccounts: [],
+		validUsernames: [],
+		usernameIndex: 0,
+		waitlisted: false,
+		timePlayed: 0,
+		emailVerified: false,
+		roles: {},
+	},
 	reducers: {
 		updateClient(state, action) {
-			state.push({ ...action.payload });
+			return (state = { ...state, ...action.payload });
 		},
-		updateUsername(state, action) {
-			const todo = state.find((todo) => todo.id === action.payload);
-			if (todo) {
-				todo.completed = !todo.completed;
-			}
+		changeUsernameIndex(state, action) {
+			state.usernameIndex = action.payload.usernameIndex;
+			// state = { ...state, action.payload.usernameIndex };
+			return state;
 		},
+		login(state, action) {},
+		register(state, action) {},
+		authenticate(state, action) {},
 	},
 });
-export const { updateClient, updateUsername } = clientSlice.actions;
+export const {
+	updateClient,
+	changeUsernameIndex,
+	authenticate,
+	login,
+	register,
+} = clientSlice.actions;
 export default clientSlice.reducer;

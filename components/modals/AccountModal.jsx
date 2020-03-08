@@ -29,6 +29,7 @@ import { compose } from "recompose";
 
 // libs:
 import { device, deleteAllCookies } from "shared/libs/utils.js";
+import localforage from "localforage";
 
 // jss:
 const styles = (theme) => ({
@@ -75,22 +76,25 @@ class AccountModal extends PureComponent {
 		super(props);
 
 		this.accountConnection = this.props.accountConnection;
-
-		this.handleClose = this.handleClose.bind(this);
-		this.handleRemoveAccount = this.handleRemoveAccount.bind(this);
 	}
 
-	handleClose() {
+	handleClose = () => {
 		// this.props.history.push("/");
 		this.props.history.goBack();
 	}
 
-	handleLogout() {
-		deleteAllCookies();
-		location.reload(true);
+	handleLogout = () => {
+		if (this.props.local) {
+			this.props.history.push("/login");
+			localforage.clear();
+			location.reload(true);
+		} else {
+			deleteAllCookies();
+			location.reload(true);
+		}
 	}
 
-	handleRemoveAccount(type) {
+	handleRemoveAccount = (type) => {
 		this.accountConnection.emit(
 			"removeConnectedAccount",
 			{ authToken: this.props.authToken, type: type },

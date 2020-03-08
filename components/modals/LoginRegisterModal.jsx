@@ -27,17 +27,13 @@ import { compose } from "recompose";
 
 // redux:
 import { connect } from "react-redux";
-import {
-	login,
-	register,
-	updateClientInfo,
-	authenticate,
-} from "src/actions/clientInfo.js";
+import { login, register, updateClient, authenticate } from "shared/features/client.js";
 
 // libs:
 import { device } from "shared/libs/utils.js";
 import Cookie from "js-cookie";
 import queryString from "query-string";
+import localforage from "localforage";
 
 // jss:
 const styles = (theme) => ({
@@ -76,25 +72,21 @@ const styles = (theme) => ({
 class LoginRegisterModal extends PureComponent {
 	constructor(props) {
 		super(props);
-
-		this.handleClose = this.handleClose.bind(this);
-		this.handleLoginForm = this.handleLoginForm.bind(this);
-		this.handleRegisterForm = this.handleRegisterForm.bind(this);
 	}
 
-	handleClose() {
+	handleClose = () => {
 		// this.props.history.push("/");
 		this.props.history.goBack();
-	}
+	};
 
-	handleLoginForm(values) {
+	handleLoginForm = (values) => {
 		this.props.login({
 			...values,
 			cb: (data) => {
 				if (data.success) {
 					alert("success");
 					Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-					this.props.updateClientInfo({
+					this.props.updateClient({
 						authToken: data.authToken,
 						loggedIn: true,
 						...data.clientInfo,
@@ -114,9 +106,9 @@ class LoginRegisterModal extends PureComponent {
 				}
 			},
 		});
-	}
+	};
 
-	handleRegisterForm(values) {
+	handleRegisterForm = (values) => {
 		this.props.register({
 			...values,
 			cb: (data) => {
@@ -128,7 +120,7 @@ class LoginRegisterModal extends PureComponent {
 				}
 			},
 		});
-	}
+	};
 
 	componentDidMount() {
 		const values = queryString.parse(this.props.location.search);
@@ -202,15 +194,16 @@ class LoginRegisterModal extends PureComponent {
 							);
 						}}
 					/>
-
-					<div className={classes.connectAnAccount}>
-						<div>
-							<ListItemText>or</ListItemText>
+					{!this.props.local && (
+						<div className={classes.connectAnAccount}>
+							<div>
+								<ListItemText>or</ListItemText>
+							</div>
+							<div style={{ marginTop: "15px" }}>
+								<ConnectAccounts showTOS={true} />
+							</div>
 						</div>
-						<div style={{ marginTop: "15px" }}>
-							<ConnectAccounts showTOS={true} />
-						</div>
-					</div>
+					)}
 				</DialogContent>
 			</Dialog>
 		);
@@ -223,8 +216,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateClientInfo: (data) => {
-			dispatch(updateClientInfo(data));
+		updateClient: (data) => {
+			dispatch(updateClient(data));
 		},
 		authenticate: (data) => {
 			dispatch(authenticate(data));

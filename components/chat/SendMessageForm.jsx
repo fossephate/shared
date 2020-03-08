@@ -14,7 +14,7 @@ import emoji from "@jukben/emoji-search";
 
 // redux:
 import { connect } from "react-redux";
-import { sendMessage } from "src/actions/chat.js";
+import { sendMessage } from "shared/features/chat.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -150,16 +150,6 @@ class SendMessageForm extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.handleKeyPress = this.handleKeyPress.bind(this);
-		this.handleTextChange = this.handleTextChange.bind(this);
-		this.sendMessage = this.sendMessage.bind(this);
-
-		this.getEmojiSuggestions = this.getEmojiSuggestions.bind(this);
-		this.getUsernameSuggestions = this.getUsernameSuggestions.bind(this);
-		this.getCommandSuggestions = this.getCommandSuggestions.bind(this);
-		this.renderNameSuggestion = this.renderNameSuggestion.bind(this);
-		this.renderCharSuggestion = this.renderCharSuggestion.bind(this);
-
 		this.rta = React.createRef();
 
 		this.state = {
@@ -187,25 +177,25 @@ class SendMessageForm extends PureComponent {
 		};
 	}
 
-	handleKeyPress(event) {
+	handleKeyPress = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			this.sendMessage();
 		}
-	}
-	handleTextChange(event) {
+	};
+	handleTextChange = (event) => {
 		this.setState({
 			text: event.target.value,
 		});
-	}
-	sendMessage() {
+	};
+	sendMessage = () => {
 		if (this.state.text !== "") {
-			this.props.sendMessage(this.state.text);
+			this.props.sendMessage({ text: this.state.text });
 			this.setState({ text: "" });
 			this.rta.setState({ value: "" });
 		}
-	}
-	getEmojiSuggestions(token) {
+	};
+	getEmojiSuggestions = (token) => {
 		if (token.length < 1) {
 			return [];
 		} else {
@@ -213,9 +203,9 @@ class SendMessageForm extends PureComponent {
 				.slice(0, 5)
 				.map(({ name, char }) => ({ name, char }));
 		}
-	}
+	};
 
-	getUsernameSuggestions(token) {
+	getUsernameSuggestions = (token) => {
 		let suggestions = [];
 		for (let userid in this.props.accountMap) {
 			let username = this.props.accountMap[userid].username;
@@ -229,9 +219,9 @@ class SendMessageForm extends PureComponent {
 			suggestions.push({ name: username, char: `@${username}` });
 		}
 		return suggestions.slice(0, 5);
-	}
+	};
 
-	getCommandSuggestions(token) {
+	getCommandSuggestions = (token) => {
 		let suggestions = [];
 		if (token.length < 1) {
 			return [];
@@ -248,23 +238,23 @@ class SendMessageForm extends PureComponent {
 			suggestions.push({ name: command, char: "!" + command });
 		}
 		return suggestions.slice(0, 5);
-	}
+	};
 
-	renderNameSuggestion(obj) {
+	renderNameSuggestion = (obj) => {
 		return (
 			<ListItem>
 				<ListItemText>{obj.entity.name}</ListItemText>
 			</ListItem>
 		);
-	}
+	};
 
-	renderCharSuggestion(obj) {
+	renderCharSuggestion = (obj) => {
 		return (
 			<ListItem>
 				<ListItemText>{obj.entity.char}</ListItemText>
 			</ListItem>
 		);
-	}
+	};
 
 	render() {
 		const { classes } = this.props;
