@@ -190,23 +190,30 @@ export function pick(...props) {
 	return (o) => props.reduce((a, e) => ({ ...a, [e]: o[e] }), {});
 }
 
-// String.prototype.replaceAll = function(search, replacement) {
-// 	let target = this;
-// 	return target.replace(new RegExp(search, "g"), replacement);
-// };
+export function interpolateColor(color1, color2, factor) {
+	if (arguments.length < 3) {
+		factor = 0.5;
+	}
+	let result = color1.slice();
+	for (let i = 0; i < 3; i++) {
+		result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+	}
+	return result;
+}
 
-// $.fn.sumHeights = function() {
-// 	let h = 0;
-// 	this.each(function() {
-// 		h += $(this).outerHeight();
-// 	});
-// 	return h;
-// };
-// $.fn.addUp = function(getter) {
-// 	return Array.prototype.reduce.call(this, function(a, b) {
-// 		return a + getter.call($(b));
-// 	}, 0);
-// }
+export function interpolateColors(color1, color2, steps) {
+	let stepFactor = 1 / (steps - 1),
+		interpolatedColorArray = [];
+
+	color1 = color1.match(/\d+/g).map(Number);
+	color2 = color2.match(/\d+/g).map(Number);
+
+	for (let i = 0; i < steps; i++) {
+		interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+	}
+
+	return interpolatedColorArray;
+}
 
 const size = {
 	mobile: "600px",
