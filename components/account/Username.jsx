@@ -2,7 +2,7 @@
 import React, { PureComponent } from "react";
 
 // components:
-import PopoverMenu from "src/components/general/PopoverMenu.jsx";
+import PopoverMenu from "shared/components/account/PopoverMenu.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";

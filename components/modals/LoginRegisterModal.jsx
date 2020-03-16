@@ -80,32 +80,54 @@ class LoginRegisterModal extends PureComponent {
 	};
 
 	handleLoginForm = (values) => {
-		this.props.login({
-			...values,
-			cb: (data) => {
-				if (data.success) {
-					alert("success");
-					Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-					this.props.updateClient({
-						authToken: data.authToken,
-						loggedIn: true,
-						...data.clientInfo,
-					});
-					// this.props.authenticate(data.authToken);
-					let values = queryString.parse(this.props.location.search);
-					if (values.verified) {
-						this.props.history.replace("/");
+		if (this.props.local) {
+			
+			this.props.login({
+				...values,
+				cb: (data) => {
+					if (data.success) {
+						localforage.setItem("RemoteGames", data.authToken);
+						this.props.updateClient({
+							authToken: data.authToken,
+							loggedIn: true,
+							...data.client,
+						});
+						// this.props.authenticate(data.authToken);
+						this.props.history.push("/");
 					} else {
-						this.props.history.goBack();
+						alert(data.reason);
 					}
-					setTimeout(() => {
-						window.location.reload();
-					}, 1000);
-				} else {
-					alert(data.reason);
-				}
-			},
-		});
+				},
+			});
+
+		} else {
+			this.props.login({
+				...values,
+				cb: (data) => {
+					if (data.success) {
+						alert("success");
+						Cookie.set("RemoteGames", data.authToken, { expires: 7 });
+						this.props.updateClient({
+							authToken: data.authToken,
+							loggedIn: true,
+							...data.clientInfo,
+						});
+						// this.props.authenticate(data.authToken);
+						let values = queryString.parse(this.props.location.search);
+						if (values.verified) {
+							this.props.history.replace("/");
+						} else {
+							this.props.history.goBack();
+						}
+						setTimeout(() => {
+							window.location.reload();
+						}, 1000);
+					} else {
+						alert(data.reason);
+					}
+				},
+			});
+		}
 	};
 
 	handleRegisterForm = (values) => {
@@ -123,12 +145,12 @@ class LoginRegisterModal extends PureComponent {
 	};
 
 	componentDidMount() {
-		const values = queryString.parse(this.props.location.search);
-		if (values.verified) {
-			setTimeout(() => {
-				alert("Email verified.");
-			}, 2000);
-		}
+		// const values = queryString.parse(this.props.location.search);
+		// if (values.verified) {
+		// 	setTimeout(() => {
+		// 		alert("Email verified.");
+		// 	}, 2000);
+		// }
 	}
 
 	render() {

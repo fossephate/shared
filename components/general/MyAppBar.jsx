@@ -7,18 +7,21 @@ import { withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
+// recompose:
+import { compose } from "recompose";
+
 // main components:
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-
 // components:
 import { AppBar, Menu, Toolbar, IconButton } from "@material-ui/core";
 // icons:
-import MoreIcon from "@material-ui/icons/MoreVert";
+import { MoreVert as MoreIcon } from "@material-ui/icons";
 
-// recompose:
-import { compose } from "recompose";
+// libs:
+import classNames from "classNames";
+
 
 // jss:
 const styles = (theme) => ({
@@ -98,7 +101,7 @@ class MyAppBar extends PureComponent {
 		);
 
 		return (
-			<div className={classes.root}>
+			<div className={classNames(classes.root, this.props.rootClasses)}>
 				<AppBar position="fixed">
 					<Toolbar>
 						{/* <IconButton
