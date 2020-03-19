@@ -81,18 +81,21 @@ class AccountModal extends PureComponent {
 	handleClose = () => {
 		// this.props.history.push("/");
 		this.props.history.goBack();
-	}
+	};
 
 	handleLogout = () => {
 		if (this.props.local) {
 			this.props.history.push("/login");
-			localforage.clear();
-			location.reload(true);
+			localforage.clear().then(() => {
+				location.reload(true);
+			});
 		} else {
 			deleteAllCookies();
-			location.reload(true);
+			setTimeout(() => {
+				location.reload(true);
+			}, 200);
 		}
-	}
+	};
 
 	handleRemoveAccount = (type) => {
 		this.accountConnection.emit(
@@ -108,7 +111,7 @@ class AccountModal extends PureComponent {
 				location.reload(true);
 			},
 		);
-	}
+	};
 
 	getTime(t) {
 		if (t < 60) {
