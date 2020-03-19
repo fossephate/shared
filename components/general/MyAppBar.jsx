@@ -20,7 +20,7 @@ import { AppBar, Menu, Toolbar, IconButton } from "@material-ui/core";
 import { MoreVert as MoreIcon } from "@material-ui/icons";
 
 // libs:
-import classNames from "classNames";
+import classNames from "classnames";
 
 
 // jss:
