@@ -177,6 +177,10 @@ class SendMessageForm extends PureComponent {
 		};
 	}
 
+	componentDidMount() {
+		this.rta.textareaRef.setAttribute("autocomplete", "off");
+	}
+
 	handleKeyPress = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
