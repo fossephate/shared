@@ -28,6 +28,7 @@ import { compose } from "recompose";
 // redux:
 import { connect } from "react-redux";
 import { login, register, updateClient, authenticate } from "shared/features/client.js";
+import { openAlert } from "shared/features/alert.js";
 
 // libs:
 import { device } from "shared/libs/utils.js";
@@ -81,7 +82,6 @@ class LoginRegisterModal extends PureComponent {
 
 	handleLoginForm = (values) => {
 		if (this.props.local) {
-			
 			this.props.login({
 				...values,
 				cb: (data) => {
@@ -95,17 +95,16 @@ class LoginRegisterModal extends PureComponent {
 						// this.props.authenticate(data.authToken);
 						this.props.history.push("/");
 					} else {
-						alert(data.reason);
+						this.props.openAlert({ title: data.reason });
 					}
 				},
 			});
-
 		} else {
 			this.props.login({
 				...values,
 				cb: (data) => {
 					if (data.success) {
-						alert("success");
+						this.props.openAlert({ title: "success" });
 						Cookie.set("RemoteGames", data.authToken, { expires: 7 });
 						this.props.updateClient({
 							authToken: data.authToken,
@@ -123,7 +122,7 @@ class LoginRegisterModal extends PureComponent {
 							window.location.reload();
 						}, 1000);
 					} else {
-						alert(data.reason);
+						this.props.openAlert({ title: data.reason });
 					}
 				},
 			});
@@ -135,10 +134,10 @@ class LoginRegisterModal extends PureComponent {
 			...values,
 			cb: (data) => {
 				if (data.success) {
-					alert("Account created! Please login!");
+					this.props.openAlert({ title: "Account created! Please login!" });
 					this.props.history.replace("/login");
 				} else {
-					alert(data.reason);
+					this.props.openAlert({ title: data.reason });
 				}
 			},
 		});
@@ -249,6 +248,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		register: (data) => {
 			dispatch(register(data));
+		},
+		openAlert: (data) => {
+			dispatch(openAlert(data));
 		},
 	};
 };
