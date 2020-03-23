@@ -200,7 +200,7 @@ class LoginRegisterModal extends PureComponent {
 						render={(props) => {
 							return (
 								<div className={classes.createAnAccount}>
-									<LoginForm onSubmit={this.handleLoginForm} />
+									<LoginForm onSubmit={this.handleLoginForm} local={this.props.local} />
 								</div>
 							);
 						}}
@@ -210,7 +210,10 @@ class LoginRegisterModal extends PureComponent {
 						render={(props) => {
 							return (
 								<div className={classes.createAnAccount}>
-									<RegisterForm onSubmit={this.handleRegisterForm} />
+									<RegisterForm
+										onSubmit={this.handleRegisterForm}
+										local={this.props.local}
+									/>
 								</div>
 							);
 						}}

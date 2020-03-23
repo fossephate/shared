@@ -138,19 +138,17 @@ class RegisterForm extends PureComponent {
 			captchaCompleted: false,
 			TOSAgreed: false,
 		};
-		this.completeCaptcha = this.completeCaptcha.bind(this);
-		this.agreeTOS = this.agreeTOS.bind(this);
 	}
 
-	completeCaptcha() {
+	completeCaptcha = () => {
 		this.setState({
 			captchaCompleted: true,
 		});
-	}
+	};
 
-	agreeTOS(event) {
+	agreeTOS = (event) => {
 		this.setState({ TOSAgreed: event.target.checked });
-	}
+	};
 
 	render() {
 		const { handleSubmit, pristine, reset, submitting, classes } = this.props;
@@ -197,14 +195,16 @@ class RegisterForm extends PureComponent {
 				<div style={{ display: "flex", justifyContent: "flex-start" }}>
 					<Field name="agree" component={renderTOS} onChange={this.agreeTOS} />
 				</div>
-				<div style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
-					<ReCAPTCHA
-						sitekey="6LeOU6UUAAAAABSPwdKHf-3ttPz9Ql4AgVTWobXI"
-						theme="dark"
-						size="normal"
-						onChange={this.completeCaptcha}
-					/>
-				</div>
+				{!this.props.local && (
+					<div style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
+						<ReCAPTCHA
+							sitekey="6LeOU6UUAAAAABSPwdKHf-3ttPz9Ql4AgVTWobXI"
+							theme="dark"
+							size="normal"
+							onChange={this.completeCaptcha}
+						/>
+					</div>
+				)}
 				<div className={classes.buttons}>
 					<Button
 						variant="contained"
@@ -213,7 +213,7 @@ class RegisterForm extends PureComponent {
 						disabled={
 							pristine ||
 							submitting ||
-							!this.state.captchaCompleted ||
+							(!this.state.captchaCompleted && !this.props.local) ||
 							!this.state.TOSAgreed
 						}
 						fullWidth
