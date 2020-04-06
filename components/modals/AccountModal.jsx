@@ -24,6 +24,9 @@ import {
 // redux:
 import { connect } from "react-redux";
 
+// actions:
+import { openAlert } from "shared/features/alert.js";
+
 // recompose:
 import { compose } from "recompose";
 
@@ -103,10 +106,10 @@ class AccountModal extends PureComponent {
 			{ authToken: this.props.authToken, type: type },
 			(data) => {
 				if (!data.success) {
-					alert(data.reason);
+					this.props.openAlert({ title: data.reason });
 					return;
 				} else {
-					alert("success");
+					this.props.openAlert({ title: "success"});
 				}
 				location.reload(true);
 			},
@@ -171,8 +174,16 @@ const mapStateToProps = (state) => {
 	};
 };
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		openAlert: (data) => {
+			dispatch(openAlert(data));
+		},
+	};
+};
+
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(mapStateToProps),
+	connect(mapStateToProps, mapDispatchToProps),
 )(AccountModal);
