@@ -96,7 +96,7 @@ class AccountModal extends PureComponent {
 			deleteAllCookies();
 			setTimeout(() => {
 				location.reload(true);
-			}, 200);
+			}, 500);
 		}
 	};
 
