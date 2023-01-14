@@ -131,11 +131,14 @@ export class ControllerState {
 
 export class MouseState {
 	constructor() {
-		this.x = 0;
-		this.y = 0;
+		this.x = 0.5;
+		this.y = 0.5;
 
 		this.dx = 0;
 		this.dy = 0;
+
+		this.dScroll = 0;
+		this.scroll = 0;
 
 		this.btns = {
 			left: 0,

@@ -98,7 +98,7 @@ export class TouchWrapper {
 		let s1 = stickSize;
 		let s2 = stickSize / 2;
 		this.leftStick
-			.on("start", (evt, data) => {
+			.on("start", (event, data) => {
 				let pos = data.frontPosition;
 				pos.x = ((pos.x + s2) / s1) * 2 - 1;
 				pos.y = -(((pos.y + s2) / s1) * 2 - 1);
@@ -106,12 +106,12 @@ export class TouchWrapper {
 				this.sticks.ly = pos.y;
 				this.leftActive = true;
 			})
-			.on("end", (evt, data) => {
+			.on("end", (event, data) => {
 				this.sticks.lx = 0;
 				this.sticks.ly = 0;
 				this.leftActive = false;
 			})
-			.on("move", (evt, data) => {
+			.on("move", (event, data) => {
 				let pos = data.instance.frontPosition;
 				pos.x = ((pos.x + s2) / s1) * 2 - 1;
 				pos.y = -(((pos.y + s2) / s1) * 2 - 1);
@@ -120,7 +120,7 @@ export class TouchWrapper {
 			});
 
 		this.rightStick
-			.on("start", (evt, data) => {
+			.on("start", (event, data) => {
 				let pos = data.frontPosition;
 				pos.x = ((pos.x + s2) / s1) * 2 - 1;
 				pos.y = -(((pos.y + s2) / s1) * 2 - 1);
@@ -128,12 +128,12 @@ export class TouchWrapper {
 				this.sticks.ry = pos.y;
 				this.rightActive = true;
 			})
-			.on("end", (evt, data) => {
+			.on("end", (event, data) => {
 				this.sticks.rx = 0;
 				this.sticks.ry = 0;
 				this.rightActive = false;
 			})
-			.on("move", (evt, data) => {
+			.on("move", (event, data) => {
 				let pos = data.instance.frontPosition;
 				pos.x = ((pos.x + s2) / s1) * 2 - 1;
 				pos.y = -(((pos.y + s2) / s1) * 2 - 1);

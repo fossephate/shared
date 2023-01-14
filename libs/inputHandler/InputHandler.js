@@ -38,6 +38,7 @@ export class InputState {
 			y: 0,
 			dx: 0,
 			dy: 0,
+			dScroll: 0,
 			btns: {
 				left: 0,
 				right: 0,
@@ -64,6 +65,7 @@ export class InputState {
 		this.mouse.y = state.y;
 		this.mouse.dx = state.dx;
 		this.mouse.dy = state.dy;
+		this.mouse.dScroll = state.dScroll;
 		this.mouse.btns = { ...state.btns };
 	}
 
@@ -128,6 +130,18 @@ export default class InputHandler {
 		}
 	}
 
+	init = () => {
+		this.keyboardWrapper.init();
+		this.gamepadWrapper.init();
+	};
+
+	destroy = () => {
+		this.keyboardWrapper.destroy();
+		this.gamepadWrapper.destroy();
+		this.touchWrapper.destroy();
+		this.mouse.destroy();
+	};
+
 	pollDevices(touchControls) {
 		let updatedState = new InputState();
 
@@ -165,8 +179,15 @@ export default class InputHandler {
 				}
 			} else {
 				// keyboard & mouse:
-				this.keyboard.poll();
-				updatedState.setKeyboardState(this.keyboard.getState());
+				if (this.keyboard.settings.enabled) {
+					if (
+						(this.mouse.settings.enabled && this.mouse.inCanvas) ||
+						!this.mouse.settings.enabled
+					) {
+						this.keyboard.poll();
+						updatedState.setKeyboardState(this.keyboard.getState());
+					}
+				}
 				if (this.mouse.settings.enabled && this.mouse.changed) {
 					this.mouse.changed = false;
 					updatedState.setMouseState(this.mouse.getState());
@@ -185,7 +206,8 @@ export default class InputHandler {
 
 		let updatedStateString = JSON.stringify(updatedState);
 
-		if (updatedStateString != this.oldInputStateString) {
+		if (updatedStateString != this.oldInputStateString || this.mouse.exception) {
+			this.mouse.exception = false;
 			this.inputState.setState(updatedState);
 
 			this.oldInputState = updatedState;

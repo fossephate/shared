@@ -156,21 +156,24 @@ class SendMessageForm extends PureComponent {
 			text: "",
 			commands: [
 				"help",
-				"discord",
+				// "discord",
 				"games",
 				"goto",
-				"source",
-				"fc",
-				"fixcontrollers",
+				// "source",
+				// "fc",
+				// "fixcontrollers",
+				"changestatus",
 				"lock",
 				"unlock",
-				"forcegoto",
+				"pluslock",
+				"unpluslock",
+				// "forcegoto",
 				"setturnlength",
 				"setforfeitlength",
-				"sublist",
-				"modlist",
-				"pluslist",
-				"banlist",
+				// "sublist",
+				// "modlist",
+				// "pluslist",
+				// "banlist",
 				"ban",
 				"unban",
 			],
@@ -239,7 +242,7 @@ class SendMessageForm extends PureComponent {
 				suggestions = [];
 				break;
 			}
-			suggestions.push({ name: command, char: "!" + command });
+			suggestions.push({ name: command, char: "/" + command });
 		}
 		return suggestions.slice(0, 5);
 	};
@@ -290,7 +293,7 @@ class SendMessageForm extends PureComponent {
 							component: this.renderNameSuggestion,
 							output: (item) => ({ text: item.char, caretPosition: "next" }),
 						},
-						"!": {
+						"/": {
 							dataProvider: this.getCommandSuggestions,
 							component: this.renderNameSuggestion,
 							output: (item) => ({ text: item.char, caretPosition: "end" }),

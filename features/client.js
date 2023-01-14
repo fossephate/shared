@@ -4,10 +4,12 @@ const clientSlice = createSlice({
 	name: "client",
 	initialState: {
 		authToken: null,
+		streamKey: null,
 		loggedIn: false,
+		accountAuthed: false,
 		hostAuthed: false,
 		userid: null,
-		username: "???",
+		username: null,// "???"
 		connectedAccounts: [],
 		validUsernames: [],
 		usernameIndex: 0,

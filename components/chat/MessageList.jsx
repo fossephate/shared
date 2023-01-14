@@ -43,11 +43,11 @@ const styles = (theme) => ({
 					: theme.palette.secondary.light,
 		},
 		position: "absolute",
-		top: 0,
+		top: 64,
 		left: 0,
-		bottom: 0,
+		bottom: 90,
 		right: 0,
-		height: "82%",
+		// height: "82%",
 	},
 });
 

@@ -5,41 +5,35 @@ export class GamepadWrapper {
 		this.haveEvents = "ongamepadconnected" in window;
 		this.pollTimer = null;
 
-		this.pollGamepads = this.pollGamepads.bind(this);
-		this.scanGamepads = this.scanGamepads.bind(this);
-		this.addGamepad = this.addGamepad.bind(this);
-		this.connectHandler = this.connectHandler.bind(this);
-		this.removeGamepad = this.removeGamepad.bind(this);
-		this.disconnectHandler = this.disconnectHandler.bind(this);
-
-		window.addEventListener("gamepadconnected", this.connectHandler);
-		window.addEventListener("gamepaddisconnected", this.disconnectHandler);
-
-		this.pollTimer = setInterval(this.pollGamepads, 1000 / 120);
-
 		this.callbacksAfterPoll = [];
 	}
 
-	addGamepad(gamepad) {
+	init = () => {
+		window.addEventListener("gamepadconnected", this.connectHandler);
+		window.addEventListener("gamepaddisconnected", this.disconnectHandler);
+		this.pollTimer = setInterval(this.pollGamepads, 1000 / 120);
+	};
+
+	addGamepad = (gamepad) => {
 		this.controllers[gamepad.index] = gamepad;
 	}
 
-	connectHandler(event) {
+	connectHandler = (event) => {
 		if (event.gamepad.id.indexOf("vJoy") > -1) {
 			return;
 		}
 		this.addGamepad(event.gamepad);
 	}
 
-	removeGamepad(gamepad) {
+	removeGamepad = (gamepad) => {
 		delete this.controllers[gamepad.index];
 	}
 
-	disconnectHandler(event) {
+	disconnectHandler = (event) => {
 		this.removeGamepad(event.gamepad);
 	}
 
-	scanGamepads() {
+	scanGamepads = () => {
 		let gamepads = navigator.getGamepads
 			? navigator.getGamepads()
 			: navigator.webkitGetGamepads
@@ -59,7 +53,7 @@ export class GamepadWrapper {
 		}
 	}
 
-	pollGamepads() {
+	pollGamepads = () => {
 		if (!this.haveEvents) {
 			this.scanGamepads();
 		}

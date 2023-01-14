@@ -18,6 +18,7 @@ const PopoverMenu = (props) => (
 		}}
 	>
 		<Paper elevation={4} style={{ padding: "10px" }}>
+			<div>{props.userid}</div>
 			{/* <Button variant="contained" color="primary">View Profile</Button> */}
 			<Button variant="contained" color="primary">
 				View Profile

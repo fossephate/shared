@@ -5,12 +5,19 @@ export class KeyboardWrapper {
 		this.pressedKeys = [];
 		this.werePressedKeys = [];
 
+		this.settings = {
+			disableKeys: false,
+		};
+
+		this.IS_MAC = /Mac/.test(navigator.platform);
+
 		this.modifiers = {
 			shift: false,
 			alt: false,
 			option: false,
 			ctrl: false,
 			command: false,
+			capslock: false,
 		};
 
 		// special keys
@@ -54,29 +61,74 @@ export class KeyboardWrapper {
 		for (let k = 1; k < 20; k++) {
 			this.map["f" + k] = 111 + k;
 		}
+	}
 
+	init = () => {
+		// document.addEventListener("keypress", this.handleKeypress, false);
 		document.addEventListener("keydown", this.handleKeydown, false);
 		document.addEventListener("keyup", this.handleKeyup, false);
 		window.addEventListener("focus", this.resetModifiers, false);
-	}
-
-	keyCode = (k) => {
-		return this.map[k] || k.toUpperCase().charCodeAt(0);
 	};
 
+	destroy = () => {
+		// document.removeEventListener("keypress", this.handleKeypress);
+		document.removeEventListener("keydown", this.handleKeydown);
+		document.removeEventListener("keyup", this.handleKeyup);
+		window.removeEventListener("focus", this.resetModifiers);
+	};
+
+	keyCode = (k) => {
+		return this.map[k] || k.charCodeAt(0);
+		// return this.map[k] || k.toUpperCase().charCodeAt(0);
+	};
+
+	// handleKeypress = (event) => {
+	// 	let keyCode = event.keyCode;
+	// 	let shiftKey = event.shiftKey;
+	// 	if (keyCode >= 97 && keyCode <= 122) {
+	// 		this.modifiers.capslock = shiftKey;
+	// 	} else if (keyCode >= 65 && keyCode <= 90 && !(shiftKey && this.IS_MAC)) {
+	// 		this.modifiers.capslock = !shiftKey;
+	// 	}
+	// };
+
 	handleKeydown = (event) => {
-		let keycode = event.keyCode;
+		let keyCode = event.keyCode;
+		// let modified = false;
 
-		if (this.pressedKeys.indexOf(keycode) === -1) {
-			this.pressedKeys.push(keycode);
+		// console.log(this.modifiers.capslock);
+
+		// if (!event.shiftKey && !this.modifiers.capslock) {
+		// 	if (keyCode >= 65 && keyCode <= 90) {
+		// 		keyCode += 32;
+		// 		modified = true;
+		// 	}
+		// }
+
+		if (keyCode === 93 || keyCode === 224) {
+			keyCode = 91; // right command on webkit, command on Gecko
 		}
 
-		if (keycode === 93 || keycode === 224) {
-			keycode = 91; // right command on webkit, command on Gecko
+		if (keyCode === 20) {
+			return;
 		}
 
-		if (keycode in MODS) {
-			this.modifiers[this.map[keycode]] = true;
+		if (keyCode >= 112 && keyCode <= 130) {
+			// if (!modified) {
+			event.preventDefault();
+			// }
+		}
+
+		if (window.inputHandler.mouse.inCanvas && this.modifiers.ctrl) {
+			event.preventDefault();
+		}
+
+		if (this.pressedKeys.indexOf(keyCode) === -1) {
+			this.pressedKeys.push(keyCode);
+		}
+
+		if (keyCode in MODS) {
+			this.modifiers[this.map[keyCode]] = true;
 			return;
 		}
 
@@ -89,6 +141,32 @@ export class KeyboardWrapper {
 
 	handleKeyup = (event) => {
 		let keyCode = event.keyCode;
+		// let modified = false;
+
+		// if (!event.shiftKey && !this.modifiers.capslock) {
+		// 	if (keyCode >= 65 && keyCode <= 90) {
+		// 		keyCode += 32;
+		// 		modified = true;
+		// 	}
+		// }
+
+		if (keyCode === 93 || keyCode === 224) {
+			keyCode = 91; // right command on webkit, command on Gecko
+		}
+
+		if (keyCode === 20) {
+			return;
+		}
+
+		if (keyCode >= 112 && keyCode <= 130) {
+			// if (!modified) {
+			event.preventDefault();
+			// }
+		}
+
+		if (window.inputHandler.mouse.inCanvas) {
+			event.preventDefault();
+		}
 
 		// remove key
 		let index = this.pressedKeys.indexOf(keyCode);
@@ -96,8 +174,8 @@ export class KeyboardWrapper {
 			this.pressedKeys.splice(index, 1);
 		}
 
-		if (keyCode == 93 || keyCode == 224) {
-			keyCode = 91; // right command on webkit, command on Gecko
+		if (keyCode >= 112 && keyCode <= 130) {
+			// event.preventDefault();
 		}
 
 		if (keyCode in MODS) {
@@ -107,12 +185,12 @@ export class KeyboardWrapper {
 
 	isPressed = (k) => {
 		k = typeof k === "string" ? this.keyCode(k) : k;
-		return this.pressedKeys.indexOf(k) != -1;
+		return this.pressedKeys.indexOf(k) !== -1;
 	};
 
-	wasPressed = (k, pressedKeys) => {
+	wasPressed = (k, pks) => {
 		k = typeof k === "string" ? this.keyCode(k) : k;
-		return pressedKeys.indexOf(k) != -1;
+		return pks.indexOf(k) !== -1;
 	};
 
 	getPressedKeyCodes = () => {

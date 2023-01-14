@@ -35,7 +35,8 @@ const styles = (props) => ({
 		// todo: use primary / secondary based on which it should be:
 		// color: theme.palette.primary.contrastText,
 		// color: "#1a0dab",
-		color: "#0000ee",
+		// color: "#0000ee",
+		color: "#5DA6FF",
 	},
 	user: {
 		display: "inline-flex",
@@ -75,6 +76,57 @@ function ping(text, time) {
 	// }).show();
 }
 
+const linkRenderer = (classes, string) => {
+	const linkExp = /^https?:\/\/[a-z0-9_./-]*$/i
+	return <>
+		{
+
+			string.split(/(https?:\/\/[a-z0-9_./-]*)/gi).map((part, k) => {
+				if (part.match(linkExp)) {
+					return (
+						<a
+							href={part}
+							className={classes?.links}
+							onFocus={(e) => e.stopPropagation()}
+							target="_blank"
+							rel="noreferrer"
+						>
+							{part}
+						</a>
+					);
+				}
+				return part;
+			})
+		}
+	</>
+}
+
+// const linkRenderer = (classes, string) => {
+//   const linkExp = /^https?:\/\/[a-z0-9_./-]*$/i;
+
+//   return (
+//     <>
+//       {string.split(linkExp).map((part, key) => {
+//         if (part.match(linkExp)) {
+//           return (
+//             <a
+//               href={part}
+//               className={classes?.links}
+//               onFocus={(e) => e.stopPropagation()}
+//               target="_blank"
+//               rel="noreferrer"
+//             >
+//               {part}
+//             </a>
+//           );
+//         }
+//         return part;
+//       })}
+//     </>
+//   );
+// };
+
+
 // class Message extends PureComponent {
 class Message extends PureComponent {
 	constructor(props) {
@@ -103,6 +155,7 @@ class Message extends PureComponent {
 		let isDev = false;
 		if (
 			username == "fosse" ||
+			username == "fosse5" ||
 			username == "remotegames" ||
 			username == "fossephate" ||
 			username == "fosse#0430"
@@ -113,7 +166,7 @@ class Message extends PureComponent {
 		let icons = [];
 
 		let account = accountMap[userid];
-		if (account) {
+		if (account && account.roles) {
 			if (isDev) {
 				icons.push(<Badge type="dev" />);
 			} else if (account.roles.host) {
@@ -138,17 +191,17 @@ class Message extends PureComponent {
 
 		return (
 			<div className={classes.root} userid={userid} onClick={this.props.onClick}>
-				<Linkify properties={{ className: classes.links }}>
-					{getTimeStamp(time)}
-					{icons}
-					{icons.length == 0 ? " " : null}
-					<Username userid={userid} style={{ display: "inline" }}>
-						<Paper elevation={4} className={classes.user}>
-							{username}
-						</Paper>
-					</Username>{" "}
-					<span>{text}</span>
-				</Linkify>
+				{/* <Linkify properties={{ className: classes.links }}> */}
+				{getTimeStamp(time)}
+				{icons}
+				{icons.length == 0 ? " " : null}
+				<Username userid={userid} style={{ display: "inline" }}>
+					<Paper elevation={4} className={classes.user}>
+						{username}
+					</Paper>
+				</Username>{" "}
+				<span>{linkRenderer(classes, text)}</span>
+				{/* </Linkify> */}
 			</div>
 		);
 	}

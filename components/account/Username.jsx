@@ -23,21 +23,23 @@ class Username extends PureComponent {
 		super(props);
 
 		this.state = {
+			loaded: false,
 			popoverOpen: false,
 		};
 
 		this.ref = React.createRef();
-
-		this.handleOpenPopover = this.handleOpenPopover.bind(this);
-		this.handleClosePopover = this.handleClosePopover.bind(this);
 	}
 
-	handleOpenPopover() {
+	handleOpenPopover = () => {
 		this.setState({ popoverOpen: true });
-	}
+	};
 
-	handleClosePopover() {
+	handleClosePopover = () => {
 		this.setState({ popoverOpen: false });
+	};
+
+	componentDidMount() {
+		this.setState({ loaded: true });
 	}
 
 	render() {
@@ -52,11 +54,14 @@ class Username extends PureComponent {
 				>
 					{this.props.children}
 				</div>
-				<PopoverMenu
-					open={this.state.popoverOpen}
-					onClose={this.handleClosePopover}
-					anchorEl={this.ref}
-				/>
+				{this.state.loaded && (
+					<PopoverMenu
+						userid={this.props.userid}
+						open={this.state.popoverOpen}
+						onClose={this.handleClosePopover}
+						anchorEl={this.ref}
+					/>
+				)}
 			</>
 		);
 	}

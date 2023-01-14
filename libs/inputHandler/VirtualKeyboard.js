@@ -9,6 +9,7 @@ const SPECIAL_KEYS = {
 	16: "shift",
 	17: "control",
 	18: "alt",
+	20: "capslock",// capslock
 	27: "escape",
 	32: "space",
 	33: "pageup",
@@ -20,6 +21,17 @@ const SPECIAL_KEYS = {
 	39: "right",
 	40: "down",
 	46: "delete",
+	188: ",",
+	190: ".",
+	191: "/",
+	192: "`",
+	189: "-",
+	187: "=",
+	186: ";",
+	222: "'",
+	219: "[",
+	221: "]",
+	220: "\\",
 };
 
 export class VirtualKeyboard {
@@ -68,6 +80,7 @@ export class VirtualKeyboard {
 		this.wasPressedKeyCodes = [];
 
 		this.settings = {
+			enabled: false,
 			analogStickMode: false,
 			stickAttack: 0.4,
 			stickReturn: 0.3,
@@ -264,6 +277,14 @@ export class VirtualKeyboard {
 		} else {
 			this.changed = true;
 		}
+	};
+
+	toggle = (state) => {
+		this.settings.enabled = state;
+	};
+
+	init = () => {
+		this.kW.init();
 	};
 
 	getControllerState = () => {
